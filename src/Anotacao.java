@@ -9,15 +9,15 @@ public class Anotacao {
     private LocalDateTime data; //Data de criação
     private boolean oculta; //Condição para exibir na busca
 
-    Anotacao (String texto) throws NullPointerException { //Construtor
-        if (null == texto || texto.isEmpty()) {
-
+    Anotacao (String texto) throws Exception { //Construtor
+        if (texto == null || texto.isEmpty()) {
+            throw new Exception("Você não pode adionar uma anotação vazia.");
         }
+
         this.texto = texto;
         this.data = LocalDateTime.now();
         this.id = gerarID();
         this.oculta = false;
-
     }
     public static int gerarID() { //Gerador de ID
         return nextId ++;
@@ -48,17 +48,7 @@ public class Anotacao {
 
     @Override
     public String toString() {
-        return  "Anotação " + id + ":\n" + texto + "\nCriada em: " + data + "\n";
+        return  "\nAnotação " + id + ":\n" + texto + "\nCriada em: " + data;
     }
-
-    public static void main(String[] args) {
-        try {
-
-        } catch (NullPointerException e)
-        {
-            System.out.println("Você não pode salvar um texto vazio.");
-        }
-    }
-
 }
 
