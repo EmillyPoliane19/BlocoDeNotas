@@ -7,53 +7,42 @@ public class BlocoDeNotas {
         this.listaDeAnotacoes = new ArrayList<>();
     }
 
-    public void adicionarAnotacao (Anotacao texto) throws Exception{ //Adiciona anotação
-        listaDeAnotacoes.add(texto);
-        System.out.println("Anotação salva.");
+    public List<Anotacao> getLista() {
+        return this.listaDeAnotacoes;
     }
 
-    public void editarAnotacao (int id) throws Exception{ //Edita anotação
-        Scanner sc = new Scanner(System.in);
-        boolean idEncontrado = false;
+    public void adicionarAnotacao (Anotacao texto) throws Exception{ //Adiciona anotação
+        listaDeAnotacoes.add(texto);
+    }
+    public List<Anotacao> buscarAnotacao(String texto) throws Exception { //Busca anotação por texto
+        List <Anotacao> listaOrdenada = new ArrayList<>();
+        if (texto == null || texto.isEmpty()) {
+            throw new Exception ("Você precisa fornecer um texto"); //Exceção para nulo
+        } else if (this.listaDeAnotacoes.isEmpty()) {
+            throw new Exception("Lista vazia!");
+        }
+        for (Anotacao anotacao : listaDeAnotacoes) {
+            if (anotacao.getTexto().toLowerCase().contains(texto.toLowerCase()) && !anotacao.isOculta()) {
+                    listaOrdenada.add(anotacao);
+            }
+        }
+
+        listarBuscaOrdenadaPelaData(listaOrdenada);
+        return listaOrdenada;
+    }
+    public void editarAnotacao (int id, String textoInformado) throws Exception{ //Edita anotação
         if (id < 0) {
             throw new Exception("Não é possível pesquisar um id negativo"); //Exceção para valor nulo
         }
         for (Anotacao texto : listaDeAnotacoes) {
             if (id == texto.getId()) {
-                idEncontrado = true;
-                System.out.println("Id encontrado! Informe o novo texto:");
-                String textoEditar = sc.nextLine();
-                texto.setTexto(textoEditar);
-                System.out.println("O texto da anotação " + id + " foi editado com sucesso!");
-                sc.nextLine();
+                texto.setTexto(textoInformado);
+                return;
             }
         }
-        if (!idEncontrado) {
-            System.out.println("O ID " + id + " não foi encontrado!");
-        }
-        sc.close();
+        throw new Exception("O ID " + id + " não foi encontrado!");
     }
-    public void buscarAnotacao(String texto) throws Exception { //Busca anotação por texto
-        List <Anotacao> listaOrdenada = new ArrayList<>();
-        if (texto == null || texto.isEmpty()) {
-            throw new Exception ("Você precisa fornecer um texto"); //Exceção para nulo
-        }
-        boolean encontrada = false;
-        for (Anotacao anotacao : listaDeAnotacoes) {
-            if (anotacao.getTexto().toLowerCase().contains(texto.toLowerCase()) && anotacao.isOculta() == false) {
-                encontrada = true;
-                if (encontrada) {
-                    listaOrdenada.add(anotacao);
-                }
-            }
-        }
-        if (!encontrada) {
-            System.out.println("Nenhum resultado encontrado!");
-        } else {
-            listarBuscaOrdenada(listaOrdenada); //Chama o método
-        }
-    }
-    public void deletarDaBusca (int id) throws Exception { //Deleta anotação da lista de busca
+    public boolean deletarDaBusca (int id) throws Exception { //Deleta anotação da lista de busca
         boolean excluida = false;
         if (id < 0) {
             throw new Exception("Não é possível pesquisar um id negativo"); //Exceção para valor negativo
@@ -61,44 +50,32 @@ public class BlocoDeNotas {
         for (Anotacao anotacao : listaDeAnotacoes) {
             if (anotacao.getId() == id) {
                 excluida = true;
-                anotacao.setOculta(true);
-                System.out.println("Anotação deletada da lista de busca.");
+                anotacao.setOculta(excluida);
             }
         }
         if (!excluida) {
-            System.out.println("Anotação não encontrada.");
+            return false;
         }
+        return true;
     }
-    public void deletarAnotacao(int id) throws Exception { //Deleta anotação do bloco de notas
+    public boolean deletarAnotacao(int id) throws Exception { //Deleta anotação do bloco de notas
         if (id < 0) {
             throw new Exception("Não é possível pesquisar um id negativo"); //Exceção para valor negativo
         }
-        boolean excluida = false;
         for (Anotacao anotacao : listaDeAnotacoes) {
             if (anotacao.getId() == id) {
-                excluida = true;
                 listaDeAnotacoes.remove(anotacao);
-                System.out.println("Anotação excluida.");
+                return true;
             }
         }
-        if (!excluida) {
-            System.out.println("Anotação não encontrada.");
-        }
+        return false;
     }
-    public void listarBuscaOrdenada(List<Anotacao> lista) { // Imprime as anotacões ao chamar o método
+    public void listarBuscaOrdenadaPelaData(List<Anotacao> lista) { // Imprime as anotacões ao chamar o método
         Collections.sort(lista, Comparator.comparing(Anotacao::getData)); //Ordena a lista com base na data
-        for (Anotacao anotacao : lista) {
-            if (!lista.isEmpty() && anotacao != null) {
-                System.out.println(anotacao);
-            }
-        }
     }
-    public void listarPorOrdem() {  // Imprime as anotacões ao chamar o método
+
+    public List<Anotacao> filtrarBuscarPorData() {  // Imprime as buscas ao chamar o método
         Collections.sort(listaDeAnotacoes, Comparator.comparing(Anotacao::getData)); //Ordena a lista com base na data
-        for (Anotacao anotacao : listaDeAnotacoes) {
-            if (!listaDeAnotacoes.isEmpty() && anotacao != null) {
-                System.out.println(anotacao);
-            }
-        }
+        return listaDeAnotacoes;
     }
 }

@@ -9,10 +9,10 @@ public class Anotacao {
     private LocalDateTime data; //Data de criação
     private boolean oculta; //Condição para exibir na busca
 
-    Anotacao (String texto) throws Exception { //Construtor
-        if (texto == null || texto.isEmpty()) {
-            throw new Exception("Você não pode adionar uma anotação vazia.");
-        }
+    Anotacao (String texto)  { //Construtor
+        //if (texto == null || texto.isEmpty()) {
+          //  throw new Exception("Você não pode adionar uma anotação vazia.");
+        //}
 
         this.texto = texto;
         this.data = LocalDateTime.now();

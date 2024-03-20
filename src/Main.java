@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -26,6 +27,7 @@ public class Main {
                     System.out.println("Informe a anotação:");
                     try {
                         anotacao.adicionarAnotacao(recebeAnotacao(sc)); // Possivel Exceção valor nulo
+                        System.out.println("Anotação salva.");
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -36,8 +38,12 @@ public class Main {
 
                 case BUSCAR:
                     System.out.println("Informe o texto que deseja pesquisar:");
+
                     try {
-                        anotacao.buscarAnotacao(recebeTexto(sc)); // Possivel Exceção valor nulo
+                        List<Anotacao> anotacaoList = anotacao.buscarAnotacao(recebeTexto(sc)); // Possivel Exceção valor nulo
+
+                        for (Anotacao a: anotacaoList) System.out.println(a);
+
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -49,18 +55,20 @@ public class Main {
                 case EDITAR:
                     System.out.println("Informe o Id da anotação que deseja editar:");
                     int id = recebeId(sc);
+                    System.out.println("Informe o novo texto:");
+                    String texto = recebeTexto(sc);
                     try {
-                        anotacao.editarAnotacao(id); // Possivel Exceção valor negativo
+                        anotacao.editarAnotacao(id, texto); // Possivel Exceção valor negativo
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
                         System.out.println("Informe o Id da anotação que deseja editar:");
-                        anotacao.editarAnotacao(recebeId(sc));
+                        anotacao.editarAnotacao(id, texto);
                     }
                     break;
 
                 case LISTAR:
-                    anotacao.listarPorOrdem();
+                    System.out.println(anotacao.filtrarBuscarPorData());
                     break;
 
                 case REMOVER:
@@ -68,6 +76,11 @@ public class Main {
                     id = recebeId(sc);
                     try {
                         anotacao.deletarDaBusca(id); // Possivel Exceção valor negativo
+                        if (anotacao.deletarDaBusca(id)) {
+                            System.out.println("Anotação deletada da lista de busca.");
+                        } else {
+                            System.out.println("Anotação não encontrada.");
+                        }
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -81,6 +94,11 @@ public class Main {
                     id = recebeId(sc);
                     try {
                         anotacao.deletarAnotacao(id); // Possivel Exceção valor negativo
+                        if (anotacao.deletarAnotacao(id)) {
+                            System.out.println("Anotação excluida.");
+                        } else {
+                            System.out.println("Anotação não encontrada.");
+                        }
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -116,6 +134,7 @@ public class Main {
             throw new Exception("Não pode usar letras.");
         }
         int id = sc.nextInt();
+        sc.nextLine();
         return id;
     }
 }
