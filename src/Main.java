@@ -41,9 +41,14 @@ public class Main {
 
                     try {
                         List<Anotacao> anotacaoList = anotacao.buscarAnotacao(recebeTexto(sc)); // Possivel Exceção valor nulo
-
-                        for (Anotacao a: anotacaoList) System.out.println(a);
-
+                        if (anotacaoList.isEmpty()) {
+                            System.out.println("Nenhum resultado encontrado.");
+                        }
+                        else {
+                            for (Anotacao a: anotacaoList) {
+                                System.out.println(a);
+                            }
+                        }
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -59,6 +64,7 @@ public class Main {
                     String texto = recebeTexto(sc);
                     try {
                         anotacao.editarAnotacao(id, texto); // Possivel Exceção valor negativo
+                        System.out.println("Anotação Editada.");
                     }
                     catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -68,15 +74,16 @@ public class Main {
                     break;
 
                 case LISTAR:
-                    System.out.println(anotacao.filtrarBuscarPorData());
+                    for (Anotacao a : anotacao.filtrarBuscarPorData())
+                        System.out.println(a);
                     break;
 
                 case REMOVER:
                     System.out.println("Informe o Id da anotação que deseja excluir da lista de busca:");
                     id = recebeId(sc);
                     try {
-                        anotacao.deletarDaBusca(id); // Possivel Exceção valor negativo
-                        if (anotacao.deletarDaBusca(id)) {
+                        anotacao.ocultarAnotacao(id); // Possivel Exceção valor negativo
+                        if (anotacao.ocultarAnotacao(id)) {
                             System.out.println("Anotação deletada da lista de busca.");
                         } else {
                             System.out.println("Anotação não encontrada.");
@@ -85,7 +92,7 @@ public class Main {
                     catch (Exception e) {
                         System.err.println(e.getMessage());
                         System.out.println("Informe o Id da anotação que deseja excluir da lista de busca:");
-                        anotacao.deletarDaBusca(recebeId(sc));
+                        anotacao.ocultarAnotacao(recebeId(sc));
                     }
                     break;
 
@@ -95,9 +102,9 @@ public class Main {
                     try {
                         anotacao.deletarAnotacao(id); // Possivel Exceção valor negativo
                         if (anotacao.deletarAnotacao(id)) {
-                            System.out.println("Anotação excluida.");
-                        } else {
                             System.out.println("Anotação não encontrada.");
+                        } else {
+                            System.out.println("Anotação Excluida.");
                         }
                     }
                     catch (Exception e) {

@@ -12,6 +12,9 @@ public class BlocoDeNotas {
     }
 
     public void adicionarAnotacao (Anotacao texto) throws Exception{ //Adiciona anotação
+        if (texto == null) {
+            throw new Exception("Você não pode adionar uma anotação vazia.");
+        }
         listaDeAnotacoes.add(texto);
     }
     public List<Anotacao> buscarAnotacao(String texto) throws Exception { //Busca anotação por texto
@@ -42,7 +45,7 @@ public class BlocoDeNotas {
         }
         throw new Exception("O ID " + id + " não foi encontrado!");
     }
-    public boolean deletarDaBusca (int id) throws Exception { //Deleta anotação da lista de busca
+    public boolean ocultarAnotacao(int id) throws Exception { //Deleta anotação da lista de busca
         boolean excluida = false;
         if (id < 0) {
             throw new Exception("Não é possível pesquisar um id negativo"); //Exceção para valor negativo
